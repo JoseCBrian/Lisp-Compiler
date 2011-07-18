@@ -31,6 +31,7 @@ public class AST {
 		T visit (CADDR caddr);
 		T visit (DEFINE define);
 		T visit (LAMBDA lambda);
+		T visit (ATOMS atoms);
 	}
 	public interface Statement extends Node {}
 	public interface Expression extends Node {}
@@ -117,6 +118,20 @@ public class AST {
 		}
 	}
 	public static LIST list (<T> n) { return new LIST(n); }
+	public static class ATOMS implements Node {
+		LinkedList<T> stack = new LinkedList<T>();
+		//public Loop (Expression p, Statement body) { predicate = p; this.body = body; }
+		public void T accept(Visitor v) { 
+			for(<T> child : stack){
+				child.accept(v);
+			}
+		}
+		//create add node method
+		public void addNode(<T> n){
+			stack.add(n);
+		}
+	}
+	public static ATOMS list (<T> n) { return new ATOMS(n); }
 	
 	public static class CAR implements LIST {
 		Statement body;
