@@ -15,75 +15,79 @@ public LispParser extends AST{
 			command = input.split("\\s+");
 			for(int a = 0; a < command.length(); a++){
 				stack2.add(command[a]);
-				if(command[a].equalsIgnoreCase("LIST")){
+				String p = Parse(command[a]);
+			}
+		}
+		return stack;
+	}
+	public String Parse(String command){
+		if(command[a].equalsIgnoreCase("LIST")){
 					stack.add(new LIST());
 				}
-				else if(command[a].equalsIgnoreCase("ATOMS")){
+				else if(command.equalsIgnoreCase("ATOMS")){
 					stack.add(new ATOMS());
 				}
-				else if(command[a].equalsIgnoreCase("CAR")){
+				else if(command.equalsIgnoreCase("CAR")){
 					stack.add(new CAR());
 				}
-				else if(command[a].equalsIgnoreCase("CDR")){
+				else if(command.equalsIgnoreCase("CDR")){
 					stack.add(new CDR());
 				}
-				else if(command[a].equalsIgnoreCase("CONS")){
+				else if(command.equalsIgnoreCase("CONS")){
 					stack.add(new CONS());
 				}
-				else if(command[a].equalsIgnoreCase("NULL?")){
+				else if(command.equalsIgnoreCase("NULL?")){
 					stack.add(new NULL?());
 				}
-				else if(command[a].equalsIgnoreCase("LIST?")){
+				else if(command.equalsIgnoreCase("LIST?")){
 					stack.add(new LIST?());
 				}
-				else if(command[a].equalsIgnoreCase("FIRST")){
+				else if(command.equalsIgnoreCase("FIRST")){
 					stack.add(new FIRST());
 				}
-				else if(command[a].equalsIgnoreCase("CADR")){
+				else if(command.equalsIgnoreCase("CADR")){
 					stack.add(new CADR());
 				}
-				else if(command[a].equalsIgnoreCase("CDDR")){
+				else if(command.equalsIgnoreCase("CDDR")){
 					stack.add(new CDDR());
 				}
-				else if(command[a].equalsIgnoreCase("CADDR")){
+				else if(command.equalsIgnoreCase("CADDR")){
 					stack.add(new CADDR());
 				}
-				else if(command[a].equalsIgnoreCase("DEFINE")){
+				else if(command.equalsIgnoreCase("DEFINE")){
 					stack.add(new DEFINE());
 				}
-				else if(command[a].equalsIgnoreCase("LAMBDA")){
+				else if(command.equalsIgnoreCase("LAMBDA")){
 					stack.add(new LAMBDA());
 				}
-				else if(command[a].equalsIgnoreCase("CDR")){
+				else if(command.equalsIgnoreCase("CDR")){
 					stack.add(new CDR());
 				}
-				else if(command[a].equalsIgnoreCase("+")){
+				else if(command.equalsIgnoreCase("+")){
 					stack.add(new Plus());
 				}
-				else if(command[a].equalsIgnoreCase("-")){
+				else if(command.equalsIgnoreCase("-")){
 					stack.add(new Minus());
 				}
-				else if(command[a].equalsIgnoreCase("*")){
+				else if(command.equalsIgnoreCase("*")){
 					stack.add(new Times());
 				}
-				else if(command[a].equalsIgnoreCase("/")){
+				else if(command.equalsIgnoreCase("/")){
 					stack.add(new Divide());
 				}
-				else if(isAlpha(command[a])){
+				else if(isAlpha(command)){
 					stack.add(new Id());
 				}
-				else if(isDigit(command[a])){
+				else if(isDigit(command)){
 					stack.add(new Id());
 				}
-				else if(command[a].equals("(") || command[a].equals(")")){
+				else if(command.equals("(") || command.equals(")")){
 					stack.add(new Loop());
 				}
 				else {
 					return "Incorrect Syntax";
 				}
-			}
-		}
-		return stack;
+				return "Parsed";
 	}
 	public boolean isAlpha(String c){
 		char[] regexes = new char[26];
