@@ -1,5 +1,6 @@
 public LispParser extends AST{
 	LinkedList<Node> stack = new LinkedList<Node>();
+	LinkedList<String> stack2 = new LinkedList<String>();
 	String input;
 	LispParser(){//default constructor
 		input = null;
@@ -13,6 +14,7 @@ public LispParser extends AST{
 			String[] command;
 			command = input.split("\\s+");
 			for(int a = 0; a < command.length(); a++){
+				stack2.add(command[a]);
 				if(command[a].equalsIgnoreCase("LIST")){
 					stack.add(new LIST());
 				}
@@ -76,6 +78,9 @@ public LispParser extends AST{
 				else if(command[a].equals("(") || command[a].equals(")")){
 					stack.add(new Loop());
 				}
+				else {
+					return "Incorrect Syntax";
+				}
 			}
 		}
 		return stack;
@@ -98,5 +103,19 @@ public LispParser extends AST{
 			return false;    
 		}    
 		return true;
+	}
+	
+	public void print(){
+		ListIterator<Node> listiter = stack.listIterator();
+		ListIterator<String> list = stack2.listIterator();
+		while(listiter.hasNext()) {
+			Object current = listiter.next();
+			System.out.print(current.toString() + " ");
+		}
+		System.out.println(" ");
+		while(list.hasNext()) {
+			Object current = listiter.next();
+			System.out.print(current.toString() + " ");
+		}
 	}
 }
