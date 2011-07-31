@@ -13,3 +13,9 @@ updated LISPAST.java
 updated SymbolTable.java
 updated LispParser.java
 created LispSyntax.java
+
+Revision 1.4
+created LISPInterpreter.java
+put all of the classes together, but they didn't work properly. Needed to go back and fix the program.
+Created one java file with all of the classes working together in a visitor format like labs 1 and 2.
+Need to create the Interpreter and compiler classes now.
