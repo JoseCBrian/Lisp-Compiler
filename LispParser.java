@@ -1,3 +1,4 @@
+import java.util.*;
 public LispParser extends AST{
 	LinkedList<Node> stack = new LinkedList<Node>();
 	LinkedList<String> stack2 = new LinkedList<String>();
@@ -83,6 +84,9 @@ public LispParser extends AST{
 				}
 				else if(command.equals("(") || command.equals(")")){
 					stack.add(new Loop());
+				}
+				else if(command.equalsIgnoreCase("square")){
+					stack.add(new SQUARE());
 				}
 				else {
 					return "Incorrect Syntax";

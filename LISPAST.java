@@ -1,5 +1,4 @@
-//package lab4;
-
+import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +31,7 @@ public class AST {
 		T visit (DEFINE define);
 		T visit (LAMBDA lambda);
 		T visit (ATOMS atoms);
+		T visit (SQUARE square);
 	}
 	public interface Statement extends Node {}
 	public interface Expression extends Node {}
@@ -96,6 +96,11 @@ public class AST {
 		public <T> T accept (Visitor<T> v) { return v.visit(this); }
 	}
 	public static Divide divide (Expression left, Expression right) { return new Divide (left, right); }
+	public static class SQUARE extends Operator {
+		public SQUARE (Expression left, Expression right) { super(left, right); }
+		public <T> T accept (Visitor<T> v) { return v.visit(this); }
+	}
+	public static SQUARE square (Expression left, Expression right) { return new SQUARE (left, right); }
 	
 	public static class DEFINE implements Statement {
 		Id variable; Expression value;
@@ -276,6 +281,8 @@ public class AST {
 		public Void visit(CADDR caddr) { return null; }
 		public Void visit(DEFINE DEFINE) { return null; }
 		public Void visit(LAMBDA lambda) { return null; }
+		public Void visit(SQUARE square) { return null; }
+		public Void visit(ATOMS atoms) { return null; }
 	}
 	public static void main (String[] args) {
 		/*
