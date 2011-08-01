@@ -23,3 +23,7 @@ Need to create the Interpreter and compiler classes now.
 Revision 1.5
 updated LISPInterpreter.java and finished the interpreter class.
 need to create the comiler class.
+
+Revision 1.6
+updated LISPInterpreter.java (main .java file it has the symbol table, parse, lexer, ast, interpreter and sementic analysis.
+Need to test the .java fully still.

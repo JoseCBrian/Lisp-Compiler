@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.Scanner;
 public class LISP{
 	private interface Visitor {
 	    void visit (Loop loop);
@@ -472,20 +473,42 @@ public class LISP{
     		}
         }
         public void visit (Program n) { n.body.accept(this); }
-
+		public boolean Syntax(String o, String t, String th){ //primary constructor
+			one = o;
+			two = t;
+			three = th;
+			if(isOperator(one)) {
+				if(checkOperation(two, three)){
+					return false;
+				}
+				return true;
+			}
+		}
+		public boolean isDigit(String c){ //checks if string sent in is a digit
+			try{        
+				Integer.parseInt(c);    
+			}	 
+			catch(NumberFormatException nfe) {        
+				return false;    
+			}	    
+			return true;
+		}
+		public boolean isAlpha(String c){ //checks if String sent in is alphabetic
+			char[] regexes = new char[26];
+			for(char c = 'a'; c <= 'z'; c++){
+				regexes[c-'a'] = c;
+			}
+			for(int a = 0; a < 26; a++){
+				if(c.equalsIgnoreCase(regexes[a])) {return true;}
+			}
+			return false;
+		}
 	}
 	public static class CompilerVisitor implements Visitor {
-		//compiler visitor that prints out C++ source code
-        public void visit (Left n) { System.out.print("ptr--"); }
-        public void visit (Right n) { System.out.print("ptr++"); }
-        public void visit (Increment n) { System.out.print("*ptr++"); }
-        public void visit (Decrement n) { System.out.print("*ptr--"); }
-        public void visit (Input n) { System.out.print("cin >> ptr"); }
-        public void visit (Output n) { System.out.print("cout << *ptr"); }
         public void visit (Loop n) {
-                System.out.print("while (*ptr){");
+                System.out.print("(");
                 n.body.accept(this);
-                System.out.print("}");
+                System.out.print(")");
         }
         public void visit (Program n) { n.body.accept(this); }
 
@@ -644,18 +667,13 @@ public class LISP{
 		}
 	}
 	public static void main (String[] args) {
-	        Node hello = LISP.parse("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.");
+			Scanner input = new Scanner(System.in);
+			System.out.println("Please enter in a LISP command for the LISP interpreter. EX: (+ 2 3): ");
+			String command = input.next();
+	        Node lisp = LISP.parse(command);
 			hello.accept(new LISP.PrintVisitor());
 	        System.out.println(" ");
 	        hello.accept(new LISP.InterpreterVisitor());
-	        hello.accept(new LISP.CompilerVisitor());//compiler for C++ language
-	        System.out.println("");
-	        hello.accept(new LISP.CompilerVisitor2());//Next Steps create compiler for Python language
-	        System.out.println(" ");
-	        //Next Steps print your name in BrainFuck
-	        Node name = LISP.parse("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>----.>++++++++++++++.---------.--------.+++++++++++++.>++.<<++++++++.>+.++++.--------------.");
-	        name.accept(new LISP.PrintVisitor());
-	        System.out.println(" ");
-	        name.accept(new LISP.InterpreterVisitor());
+	        //hello.accept(new LISP.CompilerVisitor());
 	}
 }
