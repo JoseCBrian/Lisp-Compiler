@@ -224,12 +224,14 @@ public class LISP{
 		}
 	}
 	public LinkedList<String> stack = new LinkedList<String>();
+	public LinkedList<String> getStack() { return stack;}
 	public String[][] SymbolTable = new String[3000][3];
 	public int SymbolTableSize = 0;
 	public static Program parse (String str) {
 	        return new Program (new LISP().doParse(str));
 	}
-	public static class PrintVisitor implements Visitor {
+	public static class PrintVisitor implements Visitor extends LISP{
+			public LinkedList<String> items = getStack();
 	        public void visit (Plus n) { System.out.print('+'); }
 			public void visit (Minus n) { System.out.print('-');}
 			public void visit (Times n) { System.out.print('*');}
@@ -248,6 +250,15 @@ public class LISP{
 			public void visit (ATOMS n) { System.out.print("atoms");}
 			public void visit (SQUARE n) { System.out.print("square");}
 			public void visit (LIST n) { System.out.print("list");}
+			public void visit (Number n) { 
+				System.out.print(items.getFirst());
+				items.removeFirst();
+			}
+			public void visit (Variable n) { 
+				System.out.print(items.getFirst());
+				items.removeFirst();
+			}
+			public void visit (Variable n) { System.out.print("variable");}
 	        public void visit (Loop n) {
 	                System.out.print('(');
 	                n.body.accept(this);
@@ -256,50 +267,209 @@ public class LISP{
 	        public void visit (Program n) { n.body.accept(this); }
 
 	}
-	public static class InterpreterVisitor implements Visitor {
-		public byte[] array = new byte[10000];
-		public int pos = 0;
-		/*public InterpreterVisitor(){
-			for(int a = pos; a < 10000; a++){
-				array[a] = (byte)(array[a] + 65);
+	public static class InterpreterVisitor implements Visitor extends LISP{
+		public LinkedList<String> items = getStack();
+		public String output;
+        public void visit (Plus n) {
+			int limit = items.size();
+			int one = 0;
+			int equals = 0;
+			String output = items.getFirst();
+			for(int a = 1; a < limit; a++){
+				one = Integer.parseInt(items.get(a));
+				equals = equals + one;
+				output = output + " " + Integer.toString(one);
 			}
-		}*/
-        public void visit (Left n) {pos--; 
-        //System.out.println("Left " + pos);
+			output = output + " = " + Integer.toString(equals);
+			System.out.println(output);
         }
-        public void visit (Right n) {pos++;
-        //System.out.println("Right " + pos);
+        public void visit (Minus n) {
+			int limit = items.size();
+			int one = 0;
+			int equals = Integer.parseInt(items.get(1));
+			String output = items.getFirst();
+			for(int a = 2; a < limit; a++){
+				one = Integer.parseInt(items.get(a));
+				equals = equals - one;
+				output = output + " " + Integer.toString(one);
+			}
+			output = output + " = " + Integer.toString(equals);
+			System.out.println(output);
         }
-        public void visit (Increment n) {array[pos]++; 
-        //System.out.println("Increment " + pos + " " + (int)(array[pos]) + "\n" + (char)(array[pos]));
+		public void visit (Times n) {
+			int limit = items.size();
+			int one = 0;
+			int equals = Integer.parseInt(items.get(1));
+			String output = items.getFirst();
+			for(int a = 2; a < limit; a++){
+				one = Integer.parseInt(items.get(a));
+				equals = equals*one;
+				output = output + " " + Integer.toString(one);
+			}
+			output = output + " = " + Integer.toString(equals);
+			System.out.println(output);
         }
-        public void visit (Decrement n) {array[pos]--;
-        //System.out.println("Decrement " + pos + " " + (int)(array[pos]) +"\n" + (char)(array[pos]));
+		public void visit (Divide n) {
+			int limit = items.size();
+			int one = 0;
+			int equals = Integer.get(1);
+			output = items.getFirst();
+			for(int a = 2; a < limit; a++){
+				one = Integer.parseInt(items.get(a));
+				equals = equals/one;
+				output = output + " " + Integer.toString(one);
+			}
+			output = output + " = " + Integer.toString(equals);
+			System.out.println(output);
         }
-        public void visit (Input n) {
-        	Scanner input = new Scanner(System.in);
-        	byte in = input.nextByte();
-        	array[pos] = in;
+		public void visit (CAR n) {
+			output = items.getFirst();
+			String one = items.get(1)
+			output = output + " = " + one;
+			System.out.println(output);
         }
-        public void visit (Output n) { System.out.print((char)array[pos]); }
+		public void visit (CDR n) {
+			int limit = items.size();
+			output = items.getFirst() + " = ";
+			for(int a = 2; a < limit; a++){
+				output = output + items.get(a);
+			}
+			System.out.println(output);
+        }
+		public void visit (CONS n) {
+			int limit = items.size();
+			String one;
+			output = items.getFirst();
+			for(int a = 1; a < limit; a++){
+				one = items.get(a);
+				output = output + " " + one;
+			}
+			output = output + " = " + Integer.toString(equals);
+			System.out.println(output);
+        }
+		public void visit (NULL?){
+			String output = items.getFirst();
+			int limit = items.size();
+			if(limit <= 1){
+				output = output + " = T";
+			}
+			else {
+				output = output + " = T";
+			}
+			System.out.println(output);
+		}
+		public void visit (LIST?){
+			String output = items.getFirst();
+			String one = items.get(1);
+			if(isAlpha(one.getCharAt(0)){
+				output = output + " = T";
+			}
+			else {
+				output = output + " = F";
+			}
+			System.out.println(output);
+		}
+		public void visit (FIRST n) {
+			output = items.getFirst();
+			String one = items.get(1)
+			output = output + " = " + one;
+			System.out.println(output);
+        }
+		public void visit (CADR n) {
+			int limit = items.size();
+			output = items.getFirst();
+			public LinkedList<String> newList = new LinkedList<String>();
+			for(int a = 2; a < limit; a++){
+				newList.add(items.get(a));
+			}
+			output = output + " = " + newList.get(0);
+			System.out.println(output);
+        }
+		public void visit (CDDR n) {
+			int limit = items.size();
+			output = items.getFirst() + " = ";
+			public LinkedList<String> newList = new LinkedList<String>();
+			for(int a = 2; a <= limit; a++){
+				newList.add(items.get(a));
+			}
+			for(int b = 1; b < newList.size(); b++){
+				output = output + newList.get(b);
+			}
+			System.out.println(output);
+        }
+		public void visit (CADDR n) {
+			int limit = items.size();
+			output = items.getFirst() + " = ";
+			public LinkedList<String> newList = new LinkedList<String>();
+			public LinkedList<String> newList2 = new LinkedList<String>();
+			for(int a = 2; a < limit; a++){
+				newList.add(items.get(a));
+			}
+			for(int b = 1; b < newList.size(); b++){
+				newList2.add(newList.get(b));
+			}
+			output = output + newList2.get(0);
+			System.out.println(output);
+        }
+		public void visit (DEFINE n){
+			String one = items.getFirst();
+			String two = items.get(1);
+			String output = two + " = ";
+			for(int a = 2; a < items.size(); a++){
+				output = output + items.get(a);
+			}
+			system.out.println(output);
+		}
+		public void visit (LIST n){
+			String one = items.getFirst();
+			int size =  items.size();
+			public LinkedList<String> name = new LinkedList<String>();
+			name.add(items.get(size));
+			String output = items.get(size-1) + " = ";
+			for(int a = 1; a < size-1; a++){
+				name.add(items.get(a));
+				output = output + items.get(a);
+			}
+			system.out.println(output);
+		}
+		public void visit (SQUARE n){
+			String output = items.getFirst() + " = ";
+			int one = 0;
+			for(int a = 1; a < items.size(); a++){
+				one = items.get(a) * items.get(a);
+				output = output + Integer.toString(one);
+			}
+			System.out.println(output);
+		}
+		public void visit  (ATOMS n) {
+			String output = items.getFirst() + " = ";
+			for(int a = 1; a < items.size(); a++){
+				output = output + items.get(a);
+			}
+			System.out.println(output);
+		}
+		public void visit (LAMBDA n){
+			int limit = items.size();
+			String output = "(defunc " + items.get(limit-1) + " LAMBDA ( ";
+			for(int a = 1; a < limit-1; a++){
+				output = output + items.get(a) + " ";
+			}
+			output = output + ") )";
+			System.out.println(output);
+		}
+		public void visit (Number n){}
+		public void visit (Variable n){}
         public void visit (Loop n) {
-                //System.out.print('[');
-        		//while(n.equals(']')){
-        		//int size = (int)array[pos];
-        		//if(size < 0) {
-        			//size = size*-1;
-        		//}
-        		/*for(int a = size; a > 0; a--){
-        			//System.out.println("Loop " + a);
-        			n.body.accept(this);
-        		}*/
-        		int size = (int) array[pos];
-    			while(size != 0){
-    				n.body.accept(this);
-    				size = (int) array[pos];
-    			}
-        		//}
-                //System.out.print(']');
+        	int start = 0;
+			int stop = 0;
+			for(int a = 0;  a < items.size(); a++){
+				if(items.get(a).equals("(")) { start = a;}
+				else if(items.get(a).equals(")")) { stop = a;}
+			}
+    		while(start != stop){
+    			n.body.accept(this);
+    			start++;
+    		}
         }
         public void visit (Program n) { n.body.accept(this); }
 
@@ -320,13 +490,13 @@ public class LISP{
         public void visit (Program n) { n.body.accept(this); }
 
 	}
-	public boolean isAlpha(String c){
+	public boolean isAlpha(char c){
 		char[] regexes = new char[26];
 		for(char c = 'a'; c <= 'z'; c++){
 			regexes[c-'a'] = c;
 		}
 		for(int a = 0; a < 26; a++){
-			if(c.equalsIgnoreCase(regexes[a])) {return true;}
+			if(c == regexes[a]) {return true;}
 		}
 		return false;
 	}
@@ -438,7 +608,7 @@ public class LISP{
 					stack.add(command[a]);
 					CreateSymbolTable((a.getClass()).toString(),"/",command[a])
 				}
-				else if(isAlpha(command[a])){
+				else if(isAlpha(command[a].charAt(0))){
 					a.add(new Variable());
 					stack.add(command[a]);
 					CreateSymbolTable((a.getClass()).toString(),"Variable",command[a])
