@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.*;  
 public LispSymbolTable{
 	String[][] SymbolTable = new String[3000][3];
 	int size = 0;
